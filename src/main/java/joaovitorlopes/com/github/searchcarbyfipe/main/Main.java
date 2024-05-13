@@ -1,12 +1,16 @@
 package joaovitorlopes.com.github.searchcarbyfipe.main;
 
+import joaovitorlopes.com.github.searchcarbyfipe.model.Data;
 import joaovitorlopes.com.github.searchcarbyfipe.service.ConsumeAPI;
+import joaovitorlopes.com.github.searchcarbyfipe.service.DataConversion;
 
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
     private Scanner reading = new Scanner(System.in);
     private ConsumeAPI consume = new ConsumeAPI();
+    private DataConversion conversion = new DataConversion();
 
     private final String URL_BASE = "https://parallelum.com.br/fipe/api/v1/";
 
@@ -35,6 +39,12 @@ public class Main {
 
         var json = consume.getData(address);
         System.out.println(json);
+        var brands = conversion.getList(json, Data.class);
+        brands.stream()
+                .sorted(Comparator.comparing(Data::code))
+                .forEach(System.out::println);
 
+        System.out.println("Enter a brand code for search: ");
+        var brandCode = reading.nextLine();
     }
 }
