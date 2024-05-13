@@ -1,6 +1,7 @@
 package joaovitorlopes.com.github.searchcarbyfipe.main;
 
 import joaovitorlopes.com.github.searchcarbyfipe.model.Data;
+import joaovitorlopes.com.github.searchcarbyfipe.model.Models;
 import joaovitorlopes.com.github.searchcarbyfipe.service.ConsumeAPI;
 import joaovitorlopes.com.github.searchcarbyfipe.service.DataConversion;
 
@@ -46,5 +47,14 @@ public class Main {
 
         System.out.println("Enter a brand code for search: ");
         var brandCode = reading.nextLine();
+
+        address = address + "/" + brandCode + "/modelos";
+        json = consume.getData(address);
+        var listModel = conversion.getData(json, Models.class);
+
+        System.out.println("\nModels of this brand:");
+        listModel.models().stream()
+                .sorted(Comparator.comparing(Data::code))
+                .forEach(System.out::println);
     }
 }
